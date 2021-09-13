@@ -17,6 +17,36 @@ class MemberUtilX {
     getName(member) {
         return `${member.firstName} ${member.lastName}`;
     }
+
+    getOnlineMembers(members) {
+        let filteredMembers = [];
+        members.forEach((member) => {
+            if(member.status == 'active') {
+                filteredMembers.push(member);
+            }
+        });
+        return filteredMembers;
+    }
+
+    getAwayMembers(members) {
+        let filteredMembers = [];
+        members.forEach((member) => {
+            if(member.status == 'away') {
+                filteredMembers.push(member);
+            }
+        });
+        return filteredMembers;
+    }
+
+    getOfflineMembers(members) {
+        let filteredMembers = [];
+        members.forEach((member) => {
+            if(member.status == 'inactive') {
+                filteredMembers.push(member);
+            }
+        });
+        return filteredMembers;
+    }
 }
 
 const MemberUtil = new MemberUtilX();

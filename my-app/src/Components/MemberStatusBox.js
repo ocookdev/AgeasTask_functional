@@ -9,7 +9,27 @@ export default class MemberStatusBox extends React.Component {
 
     render() {
         return <div className="MemberStatusBox">
-            <p>{MemberUtil.getName(this.props.member)}</p>
+            {this.getStatusIcon()}
+            <div className='statusBoxContent'>
+                <div className='statusBoxName'>{MemberUtil.getName(this.props.member)}</div>
+                <div className='statusBoxStatus'>{this.props.member.status}</div>
+            </div>
         </div>;
+    }
+
+    getStatusIcon() {
+        let classNames = 'statusBoxIcon';
+        switch(this.props.member.status) {
+            case 'active':
+                classNames += ' statusBoxIcon--active';
+                break;
+            case 'away':
+                classNames += ' statusBoxIcon--away';
+                break;
+            case 'inactive':
+                classNames += ' statusBoxIcon--inactive';
+                break;
+        }
+        return <span className={classNames}></span>;
     }
 }
