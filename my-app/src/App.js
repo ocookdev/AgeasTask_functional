@@ -1,7 +1,6 @@
 import './App.css';
 import MemberList from './Components/MemberList.js';
 
-
 function App() {
   // Load members from json file
   let members = require('./Members.json');

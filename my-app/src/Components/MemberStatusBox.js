@@ -1,6 +1,12 @@
 import React from 'react';
 import MemberUtil from '../MemberUtil.js';
 
+const statusNameMap = {
+    active: 'Online',
+    away: 'Away',
+    inactive: 'Offline'
+};
+
 export default class MemberStatusBox extends React.Component {
     constructor(props) {
         super(props);
@@ -12,7 +18,7 @@ export default class MemberStatusBox extends React.Component {
             {this.getStatusIcon()}
             <div className='statusBoxContent'>
                 <div className='statusBoxName'>{MemberUtil.getName(this.props.member)}</div>
-                <div className='statusBoxStatus'>{this.props.member.status}</div>
+                <div className='statusBoxStatus'>{statusNameMap[this.props.member.status]}</div>
             </div>
         </div>;
     }
