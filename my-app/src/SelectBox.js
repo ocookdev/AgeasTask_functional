@@ -21,12 +21,10 @@ export default class SelectBox extends React.Component {
     render() {
         return (
             <div className='selectBox'>
-                <label>
-                    {this.props.label}
-                    <select value={this.state.value} onChange={this.handleChange}>
-                        {this.getSelectOptions()}
-                    </select>
-                </label>
+                <label for={this.props.label}>{this.props.label}</label><br/>
+                <select id={this.props.label} value={this.state.value} onChange={this.handleChange}>
+                    {this.getSelectOptions()}
+                </select>
             </div>
         );
     }
