@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import SelectBox from "../UI/SelectBox.js";
-import MemberUtil from "../MemberUtil.js";
 import MemberStatusBox from "./MemberStatusBox.js";
 
 // Status's
@@ -26,8 +25,38 @@ const ORDER_OPTIONS = [
 ];
 
 const MemberList = (props) => {
-  const [memberStatus, setMemberStatus] = useState(STATUS_ALL);
+  const [memberStatusFilter, setMemberStatusFilter] = useState(STATUS_ALL);
   const [memberOrder, setMemberOrder] = useState(ORDER_AZ);
+
+  const filterMembers = (members) => {
+    const filteredMembers = [];
+    members.forEach((member) => {
+      // Remove all under 18's
+      if (member.isUnder18()) return;
+
+      let hasCorrectStatus = false;
+      switch (memberStatusFilter) {
+        case STATUS_ONLINE:
+          hasCorrectStatus = member.isOnline();
+          break;
+        case STATUS_AWAY:
+          hasCorrectStatus = member.isAway();
+          break;
+        case STATUS_OFFLINE:
+          hasCorrectStatus = member.isOffline();
+          break;
+        default:
+          // No filter applied
+          hasCorrectStatus = true;
+      }
+
+      if (!hasCorrectStatus) return;
+      
+      filteredMembers.push(member);
+    });
+
+    return filteredMembers;
+  };
 
   const orderMembers = (members) => {
     members.sort((a, b) => {
@@ -41,28 +70,17 @@ const MemberList = (props) => {
     });
   };
 
-  const filterMembers = (members) => {
-    switch (memberStatus) {
-      case STATUS_ONLINE:
-        return MemberUtil.getOnlineMembers(members);
-      case STATUS_AWAY:
-        return MemberUtil.getAwayMembers(members);
-      case STATUS_OFFLINE:
-        return MemberUtil.getOfflineMembers(members);
-      default:
-        return members;
-    }
-  };
-
-  // Get our list of members without any under 18's
-  const members = MemberUtil.removeUnder18s(props.members);
-  // Sort the members
-  orderMembers(members);
   // Filter the members
-  const filteredMembers = filterMembers(members);
+  const filteredMembers = filterMembers(props.members);
+
+  // Sort the members
+  orderMembers(filteredMembers);
+
+  // Make a status box for each member
   const statusBoxes = filteredMembers.map((member) => {
     return <MemberStatusBox key={member.id} member={member} />;
   });
+
   return (
     <div className="MemberList">
       <h1>Members List</h1>
@@ -70,9 +88,9 @@ const MemberList = (props) => {
         <SelectBox
           label="Status"
           selectOptions={STATUS_OPTIONS}
-          selected={memberStatus}
+          selected={memberStatusFilter}
           fnCallback={(value) => {
-            setMemberStatus(parseInt(value));
+            setMemberStatusFilter(parseInt(value));
           }}
         />
         <SelectBox

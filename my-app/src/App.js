@@ -1,12 +1,13 @@
 import './App.css';
+import Member from './Member.js';
 import MemberList from './Member/MemberList.js';
 
 function App() {
   // Load members from json file
-  const members = require('./Members.json');
-  // Create date objects from date strings
-  members.forEach((member) => {
-    member.dateOfBirth = new Date(member.dateOfBirth);
+  const memberData = require('./Members.json');
+  // Create member objects from raw JSON
+  const members = memberData.map((object) => {
+    return new Member(object);
   });
 
   return (
